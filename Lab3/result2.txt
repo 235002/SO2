@@ -1,0 +1,3 @@
+\home\pucek\pucek\SO2\Lab3\Test\test1\test2\test3\test4\test42.exe|2019-03-31|23:12:28
+\home\pucek\pucek\SO2\Lab3\Test\test1\test2\test3\test4\test40.exe|2019-03-31|23:12:21
+\home\pucek\pucek\SO2\Lab3\Test\test1\test2\test3\test4\test41.exe|2019-03-31|23:12:25
