@@ -18,7 +18,7 @@ const int numDistiller = 4;
 const int numForager = 4;
 const int numCustomer = 4;
 
-int fieldStatus = 100;
+int fieldStatus = 50;
 int cutCereals = 10;
 int factoryGrainStatus = 0;
 
@@ -49,32 +49,24 @@ void showStatus() {
 		mvprintw(13+i,25,"|");
 	}
 	for (int i=0; i<45; i++) {
-		mvprintw(12+1,90,"|");
+		mvprintw(12+i,70,"|");
 	}
 	
-	mvprintw(1,173,"Ilosc zboza w fabryce : %d",factoryGrainStatus);
-	mvprintw(1,4,"Stan pola : %d",fieldStatus);
-	mvprintw(1,27,"Ilosc scietego zboza : %d",cutCereals);
+	mvprintw(1,4,"Stan pola: %d",fieldStatus);
+	mvprintw(2,27,"Ilosc scietego zboza: %d",cutCereals);
 	
-	mvprintw(19,173,"Ziarno: %d",grainStatus);
-	mvprintw(29,173,"Sloma: %d",strawStatus);
+	mvprintw(1,60,"Fabryka");
+	mvprintw(2,60,"Ilosc zboza w fabryce: %d",factoryGrainStatus);
+	mvprintw(3,60,"Ziarno: %d",grainStatus);
+	mvprintw(4,60,"Sloma: %d",strawStatus);
 	
-	mvprintw(13,130,"Produkcja ");
-	mvprintw(15,130,"Produkcja maki ");
-	mvprintw(25,135,"Produkcja spirytusu ");
-	mvprintw(35,135,"Produkcja paszy");
+	mvprintw(13,75,"Produkcja ");
+	mvprintw(15,75,"Produkcja maki ");
+	mvprintw(21,75,"Produkcja spirytusu ");
+	mvprintw(27,75,"Produkcja paszy");
 	
-	mvprintw(13,95,"Gotowe produkty");
-	mvprintw(15,95,"Maka : %d",flourStatus);
-	mvprintw(25,95,"Spirytus: %d",alcoholStatus);
-	mvprintw(35,95,"Pasza: %d",forageStatus);
-	
-	mvprintw(13,55,"Sprzedane produkty");
-	mvprintw(15,47,"Maka		Spirytus			Pasza");
-	
-	mvprintw(45,35,"Pieniadze : %d",cash);
-	
-	mvprintw(46,35,"Wsploczynnik wzrostu : %d",growthRate);
+	mvprintw(13,40,"Sprzedane produkty");
+	mvprintw(15,35,"Maka Spirytus Pasza Pieniadze");
 	
 	refresh();
 	mtx.unlock();
@@ -82,19 +74,8 @@ void showStatus() {
    
 void showStatusFactoryGrain() {
 	mtx.lock();
-	int counter = factoryGrainStatus;
-	mvprintw(1,173,"Ilosc zboza w fabryce : ");
-	mvprintw(1,173,"Ilosc zboza w fabryce :  %d",factoryGrainStatus);
-	for(int i=0;  i<10; i++) {
-		for(int j=0;  j<10; j++) {
-			if(counter > 0) {
-				mvprintw(i+2,j+182,"*");
-				counter--;
-			} else {
-				mvprintw(i+2,j+182," ");
-			}
-		}
-	}
+	mvprintw(2,60,"Ilosc zboza w fabryce : ");
+	mvprintw(2,60,"Ilosc zboza w fabryce :  %d",factoryGrainStatus);
 	refresh();
 	mtx.unlock();
 }
@@ -116,6 +97,7 @@ void showStatusField() {
 				attron(COLOR_PAIR(2));
 				mvprintw(i+2,j+2," ");
 				attroff(COLOR_PAIR(2));
+				counter--;
 			}
 		}
 	}
@@ -138,56 +120,21 @@ void showStatusFarmer(int tID, bool work) {
 
 void showStatusCutCereals() {
 	mtx.lock();
-	int counter = cutCereals;
-	mvprintw(1,27,"Ilosc zboza: ");
-	mvprintw(1,27,"Ilosc zboza:  %d", cutCereals);
-	for(int i=0;  i<10; i++) {
-		for(int j=0;  j<10; j++) {
-			if(counter > 0) {
-				mvprintw(i+2,j+29,"*");
-				counter--;
-			} else {
-				mvprintw(i+2,j+29," ");
-			}
-		}
-	}
+	mvprintw(2,27,"Ilosc scietego zboza: ");
+	mvprintw(2,27,"Ilosc scietego zboza: %d", cutCereals);
+	
 	refresh();
 	mtx.unlock();
 }
 
 void showStatusFactory() {
 	mtx.lock();
-	int counter1 = grainStatus;
-	int counter2 = strawStatus;
-	mvprintw(19,173,"Ziarno: ");
-	mvprintw(19,173,"Ziarno:  %d",grainStatus);
+	mvprintw(3,60,"Ziarno: ");
+	mvprintw(3,60,"Ziarno: %d",grainStatus);
 	
-	mvprintw(29,173,"Sloma: ");
-	mvprintw(29,173,"Sloma:  %d",strawStatus);
-	for(int i=0;  i<9; i++) {
-		for(int j=0;  j<10; j++) {
-			if(counter1 > 0) {
-				attron(COLOR_PAIR(2));
-				mvprintw(i+20,j+175,"z");
-				attroff(COLOR_PAIR(2));
-				counter1--;
-			} else {
-				attron(COLOR_PAIR(2));
-				mvprintw(i+20,j+175," ");
-				attroff(COLOR_PAIR(2));
-			}
-			if(counter2 > 0) {
-				attron(COLOR_PAIR(2));
-				mvprintw(i+30,j+175,"s");
-				attroff(COLOR_PAIR(2));
-				counter2--;
-			} else {
-				attron(COLOR_PAIR(2));
-				mvprintw(i+30,j+175," ");
-				attroff(COLOR_PAIR(2));
-			}
-		}
-	}
+	mvprintw(4,60,"Sloma: ");
+	mvprintw(4,60,"Sloma: %d",strawStatus);
+	
 	refresh();
 	mtx.unlock();
 }
@@ -195,87 +142,65 @@ void showStatusFactory() {
 void showStatusDriver(int tID, int position) {
 	mtx.lock();
 	if(position == 0) {
-		mvprintw(2+tID,45,"#");
+		mvprintw(3+tID,27,"Kierowca %d", tID);
 		refresh();
 	} else {
-		for (int i=45; i<95; i++) {
-			for (int j=2; j<=6; j++) {
-				mvprintw(j+tID*5,i-1," ");
-			}
-			mvprintw(2+tID*5,i,"#");
-			refresh();
-			usleep(20000);
-		}
+		mvprintw(3+tID,27,"Kierowca %d jedzie do fabryki", tID);
+		refresh();
+		usleep(200000);
 	}
 	mtx.unlock();
 } 
 
 void showStatusDriver(int tID) {
 	mtx.lock();
-	for (int i=95; i>45; i--) {
-		for (int j=2; j<=6; j++) {
-				mvprintw(j+tID*5,i-1," ");
-			}
-			mvprintw(2+tID*5,i,"#");
-			refresh();
-			usleep(20000);
-	}
-	for (int j=2; j<=6; j++) {
-		mvprintw(j+tID*5,45," ");
-	}
+	mvprintw(3+tID,27,"Kierowca %d wraca z fabryki", tID);
+	refresh();
+	usleep(200000);
 	mtx.unlock();
 } 
 
 void showStatusMiller(int tID, int position) {
 	mtx.lock();
-	mvprintw(17+tID,125,"Mlynarz %d: ",tID);
+	mvprintw(16+tID,125,"Mlynarz %d: ",tID);
 	for (int i=0; i<10; i++) {
-		mvprintw(17+tID,136+i," ");
+		mvprintw(16+tID,136+i," ");
 	}
 	for (int i=0; i<position; i++) {
 		attron(COLOR_PAIR(1));
-		mvprintw(17+tID,136+i," ");
+		mvprintw(16+tID,136+i," ");
 		attroff(COLOR_PAIR(1));
 	}
-	char percent = 37;
-	mvprintw(17+tID,146,"      ");
-	mvprintw(17+tID,146,"%d  %c",position*10,percent);
 	refresh();
 	mtx.unlock();
 }
 
 void showStatusDistiller(int tID, int position) {
 	mtx.lock();
-	mvprintw(27+tID,125,"Gorzelnik %d: ",tID);
+	mvprintw(22+tID,125,"Gorzelnik %d: ",tID);
 	for (int i=0; i<10; i++) {
-		mvprintw(27+tID,136+i," ");
+		mvprintw(22+tID,136+i," ");
 	}
 	for (int i=0; i<position; i++) {
 		attron(COLOR_PAIR(3));
-		mvprintw(27+tID,136+i," ");
+		mvprintw(22+tID,136+i," ");
 		attroff(COLOR_PAIR(3));
 	}
-	char percent = 37;
-	mvprintw(27+tID,146,"      ");
-	mvprintw(27+tID,146,"%d  %c",position*10,percent);
 	refresh();
 	mtx.unlock();
 }
 
 void showStatusForager(int tID, int position) {
 	mtx.lock();
-	mvprintw(37+tID,125,"Paszarz %d: ",tID);
+	mvprintw(28+tID,125,"Paszarz %d: ",tID);
 	for (int i=0; i<10; i++) {
-		mvprintw(37+tID,136+i," ");
+		mvprintw(28+tID,136+i," ");
 	}
 	for (int i=0; i<position; i++) {
 		attron(COLOR_PAIR(4));
-		mvprintw(37+tID,136+i," ");
+		mvprintw(28+tID,136+i," ");
 		attroff(COLOR_PAIR(4));
 	}
-	char percent = 47;
-	mvprintw(37+tID,146,"      ");
-	mvprintw(37+tID,146,"%d  %c",position*10,percent);
 	refresh();
 	mtx.unlock();
 }
@@ -289,11 +214,11 @@ void showStatusFlour() {
 		for (int j=0; j<10; j++) {
 			if(counter > 0) {
 				attron(COLOR_PAIR(1));
-				mvprintw(i+17,j+95,"M");
+				mvprintw(i+16,j+95,"M");
 				attroff(COLOR_PAIR(1));
 				counter--;
 			} else {
-				mvprintw(i+17,j+95," ");
+				mvprintw(i+16,j+95," ");
 			}
 		}
 	}
@@ -304,17 +229,17 @@ void showStatusFlour() {
 void showStatusAlcohol() {
 	mtx.lock();
 	int counter = alcoholStatus;
-	mvprintw(25,95,"Alkohol : ");
-	mvprintw(25,95,"Alkohol : %d",alcoholStatus);
+	mvprintw(21,95,"Spirytus : ");
+	mvprintw(21,95,"Spirytus : %d",alcoholStatus);
 	for (int i=0; i<5; i++) {
 		for (int j=0; j<10; j++) {
 			if(counter > 0) {
 				attron(COLOR_PAIR(3));
-				mvprintw(i+27,j+95,"A");
+				mvprintw(i+22,j+95,"S");
 				attroff(COLOR_PAIR(3));
 				counter--;
 			} else {
-				mvprintw(i+27,j+95," ");
+				mvprintw(i+22,j+95," ");
 			}
 		}
 	}
@@ -325,17 +250,17 @@ void showStatusAlcohol() {
 void showStatusForage() {
 	mtx.lock();
 	int counter = forageStatus;
-	mvprintw(35,95,"Pasza : ");
-	mvprintw(35,95,"Pasza : %d",forageStatus);
+	mvprintw(27,95,"Pasza : ");
+	mvprintw(27,95,"Pasza : %d",forageStatus);
 	for (int i=0; i<5; i++) {
 		for (int j=0; j<10; j++) {
 			if(counter > 0) {
 				attron(COLOR_PAIR(4));
-				mvprintw(i+37,j+95,"P");
+				mvprintw(i+28,j+95,"P");
 				attroff(COLOR_PAIR(4));
 				counter--;
 			} else {
-				mvprintw(i+37,j+95," ");
+				mvprintw(i+28,j+95," ");
 			}
 		}
 	}
@@ -345,7 +270,7 @@ void showStatusForage() {
 
 void showStatusCustomer(int tID) {
 	mtx.lock();
-	mvprintw(17+tID,35,"Klient %d:		%d		%d		%d		%d",
+	mvprintw(17+tID,28,"Klient %d: %d    %d       %d     %d",
 		tID,flourStatusCustomer[tID],alcoholStatusCustomer[tID],forageStatusCustomer[tID], cashCustomer[tID]);
 	refresh();
 	mtx.unlock();
@@ -353,10 +278,14 @@ void showStatusCustomer(int tID) {
 
 void showStatusCash() {
 	mtx.lock();
-	mvprintw(45,35,"Pieniadze : ");
-	mvprintw(45,35,"Pieniadze : %d",cash);
-	mvprintw(45,35,"Wsploczynnik wzrostu : ");
-	mvprintw(45,35,"Wsploczynnik wzrostu : %d",growthRate);
+	int c = 0;
+	for (int i=0; i<numCustomer; i++) {
+		c += cashCustomer[i];
+	}
+	mvprintw(29,28,"Pieniadze: ");
+	mvprintw(29,28,"Pieniadze: %d",c);
+	mvprintw(30,28,"Wsploczynnik wzrostu: ");
+	mvprintw(30,28,"Wsploczynnik wzrostu: %d",growthRate);
 	refresh();
 	mtx.unlock();
 }
@@ -366,8 +295,8 @@ void showStatusCash() {
 void startTreadField() {
 	while (1) {
 		showStatusField();
-		while (fieldStatus > 0) {
-			usleep(rand()%10000 + (int)(10000/growthRate));
+		while (fieldStatus <= 100) {
+			usleep(rand()%1000000 + (int)(1000000/growthRate));
 			unique_lock<mutex> lck(mtx);
 			fieldStatus++;
 			lck.unlock();
@@ -382,7 +311,7 @@ void startTreadFarmer(int tID) {
 		bool work = false;
 		showStatusFarmer(tID,work);
 		usleep(1000000);
-		if (fieldStatus < 20) {
+		if (fieldStatus < 25) {
 			unique_lock<mutex> lck(mtx);
 			while (fieldStatus < 50) cv_field.wait(lck);
 			lck.unlock();
@@ -436,7 +365,7 @@ void startTreadFactory(int tID) {
 	while (1) {
 		make = false;
 		mtx.lock();
-		if (factoryGrainStatus > 0 && flourStatus <= 50 && forageStatus <= 50) {
+		if (factoryGrainStatus > 0 && grainStatus <= 150 && strawStatus <= 100) {
 			factoryGrainStatus--;
 			make = true ;
 		}
@@ -449,18 +378,19 @@ void startTreadFactory(int tID) {
 				usleep(rand()%1000000+1000000);
 				grainStatus++;
 				showStatusFactory();
-				if (i%2) {
+				if (i%2 == 1) {
 					usleep(rand()%1000000+1000000);
 					strawStatus++;
 					showStatusFactory();
 				}
 			}
 		}
-		if (cash >= 100 && growthRate < 100000) {
+		if (cash >= 100 && growthRate < 100) {
 			cash -= 100;
-			growthRate *= 2;
+			growthRate += 10;
 			showStatusCash();
 		}
+		if (growthRate > 50) growthRate = 1;
 	}
 }
 
@@ -469,15 +399,15 @@ void startTreadMiller(int tID) {
 	while (1) {
 		make = false;
 		mtx.lock();
-		if ((grainStatus >= 7) && (flourStatus <= alcoholStatus) && (flourStatus <= forageStatus)){
-			grainStatus -= 7;
+		if ((grainStatus >= 10) && (flourStatus <= alcoholStatus) && (flourStatus <= forageStatus)){
+			grainStatus -= 10;
 			make = true;
 		}
 		mtx.unlock();
 		showStatusFactory();
 		if (make) {
 			for (int i=0; i<=10; i++) {
-				usleep(rand()%100000+100000);
+				usleep(rand()%10000+10000);
 				showStatusMiller(tID,1);
 			}
 			flourStatus++;
@@ -491,15 +421,15 @@ void startTreadDistiller(int tID) {
 	while (1) {
 		make = false;
 		mtx.lock();
-		if ((grainStatus >= 7) && (alcoholStatus <= flourStatus) && (alcoholStatus <= forageStatus)){
-			grainStatus -= 7;
+		if ((grainStatus >= 20) && (alcoholStatus <= flourStatus) && (alcoholStatus <= forageStatus)){
+			grainStatus -= 20;
 			make = true;
 		}
 		mtx.unlock();
 		showStatusFactory();
 		if (make) {
 			for (int i=0; i<=10; i++) {
-				usleep(rand()%100000+100000);
+				usleep(rand()%10000+10000);
 				showStatusDistiller(tID,1);
 			}
 			alcoholStatus++;
@@ -513,16 +443,16 @@ void startTreadForager(int tID) {
 	while (1) {
 		make = false;
 		mtx.lock();
-		if ((grainStatus >= 7 && strawStatus >= 14) && (forageStatus <= flourStatus) && (forageStatus <= alcoholStatus)){
-			grainStatus -= 7;
-			strawStatus -= 14;
+		if ((grainStatus >= 10 && strawStatus >= 15) && (forageStatus <= flourStatus) && (forageStatus <= alcoholStatus)){
+			grainStatus -= 10;
+			strawStatus -= 15;
 			make = true;
 		}
 		mtx.unlock();
 		showStatusFactory();
 		if (make) {
 			for (int i=0; i<=10; i++) {
-				usleep(rand()%100000+100000);
+				usleep(rand()%10000+10000);
 				showStatusForager(tID,1);
 			}
 			forageStatus++;
