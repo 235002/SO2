@@ -154,7 +154,7 @@ void showStatusDriver(int tID, int position) {
 
 void showStatusDriver(int tID) {
 	mtx.lock();
-	mvprintw(3+tID,27,"Kierowca %d wraca z fabryki", tID);
+	mvprintw(3+tID,27,"Kierowca %d", tID);
 	refresh();
 	usleep(200000);
 	mtx.unlock();
@@ -311,11 +311,12 @@ void startTreadFarmer(int tID) {
 		bool work = false;
 		showStatusFarmer(tID,work);
 		usleep(1000000);
+		unique_lock<mutex> lck(mtx);
 		if (fieldStatus < 25) {
-			unique_lock<mutex> lck(mtx);
 			while (fieldStatus < 50) cv_field.wait(lck);
-			lck.unlock();
 		}
+		lck.unlock();
+		
 		mtx.lock();
 		if ((counterFarmer[tID] <= counterFarmer[(2*numFarmer+tID-1)%numFarmer]) && 
 		   (counterFarmer[tID] <= counterFarmer[(2*numFarmer+tID+1)%numFarmer])) {
@@ -327,9 +328,11 @@ void startTreadFarmer(int tID) {
 			}
 		}
 		mtx.unlock();
+		
 		cv_cutCereal.notify_one();
 		showStatusField();
 		showStatusCutCereals();
+		
 		if (work) {
 			for (int i=0; i<10; i++) {
 				showStatusFarmer(tID,work);
@@ -344,17 +347,17 @@ void startTreadDriver(int tID) {
 		showStatusDriver(tID, 0);
 		unique_lock<mutex> lck(mtx);
 		while (cutCereals < 20) cv_cutCereal.wait(lck);
+		cutCereals -= 20;
 		lck.unlock();
 		
-		cutCereals -= 20;
 		showStatusCutCereals();
 		showStatusDriver(tID,1);
 		usleep(500000);
 		
 		lck.lock();
 		while (factoryGrainStatus > 80) cv_factoryGrain.wait(lck);
-		lck.unlock();
 		factoryGrainStatus += 20;
+		lck.unlock();
 		showStatusFactoryGrain();
 		showStatusDriver(tID);
 	}
@@ -405,6 +408,7 @@ void startTreadMiller(int tID) {
 		}
 		mtx.unlock();
 		showStatusFactory();
+		mtx.lock();
 		if (make) {
 			for (int i=0; i<=10; i++) {
 				usleep(rand()%10000+10000);
@@ -413,6 +417,7 @@ void startTreadMiller(int tID) {
 			flourStatus++;
 			showStatusFlour();
 		}
+		mtx.unlock();
 	}
 }
 
@@ -427,6 +432,7 @@ void startTreadDistiller(int tID) {
 		}
 		mtx.unlock();
 		showStatusFactory();
+		mtx.lock();
 		if (make) {
 			for (int i=0; i<=10; i++) {
 				usleep(rand()%10000+10000);
@@ -435,6 +441,7 @@ void startTreadDistiller(int tID) {
 			alcoholStatus++;
 			showStatusAlcohol();
 		}
+		mtx.unlock();
 	}
 }
 
@@ -450,6 +457,7 @@ void startTreadForager(int tID) {
 		}
 		mtx.unlock();
 		showStatusFactory();
+		mtx.lock();
 		if (make) {
 			for (int i=0; i<=10; i++) {
 				usleep(rand()%10000+10000);
@@ -458,6 +466,7 @@ void startTreadForager(int tID) {
 			forageStatus++;
 			showStatusForage();
 		}
+		mtx.unlock();
 	}
 }
 
@@ -583,4 +592,5 @@ int main(){
 	endwin();
 	return 0;
 }
+
 

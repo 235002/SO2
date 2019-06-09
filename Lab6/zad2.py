@@ -15,7 +15,7 @@ data = file.read()
 file.close()
 
 for x in range(0, counter)
-	file = open(dirTo + "/File" + str(x) + ".txt.". "w")
+	file = open(dirTo + "/File" + str(x) + ".txt". "w")
 	file.write(data)
 	file.close()
 	
